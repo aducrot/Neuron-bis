@@ -15,6 +15,11 @@ class Neuron
 	double tauxRefractory_; //refractory time (le neuron n'est pas stimule)
 	double conductivity_;
 	double Res_;
+	int clock_; // neuron internal clock to keep track of time- number of h steps
+	bool isSpiking_; // to know if the neuron has spiked.
+	int Delay_; // the number of h needed to get the delay time
+	vector <int> SumSpike_; // take the number of spikes that happened in 1 h step
+	double J_;
 
 	public:
 	//constructeur et destructeur
@@ -32,6 +37,8 @@ class Neuron
 	const double getTauxRefractory();
 	const double getRes();
 	const double getConductivity();
+	const int getClock();
+	const bool getisSpiking();
 
 	void setPotential(double p);
 	//void setCurrent(double i);
@@ -39,9 +46,11 @@ class Neuron
 	void setSpikeTime(double t);
 	void setRes(double r);
 	void setConductivity(double c);
+	void setIsSpiking(bool answer);
+	void setClock(double t);
 
 	// methodes
-	void update(double const& Iext, double const& h, double const& threshold, double& simtime, double& n, ostream& out);
+	void update(double const& Iext, double const& h, double const& threshold, double& simtime, double& n, ostream& out, bool ispiking);
 
 };
 
