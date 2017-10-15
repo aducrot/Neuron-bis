@@ -8,33 +8,48 @@ int main()
 	double t_stop (1000);
 	double h (0.1);
 	double simtime (0);
-	double Iext;
+	double Iext1;
+	double Iext2;
 	//auto Iext=unifrom_int_distribution<> (0,400);
-	cout<< "what is the intensity of the current Iext? the value should be between 0 and 400 pA."<< endl; //gestion d'erreur a ajouter
-	cin>> Iext;
+	cout<< "what is the intensity of the current Iext for the 1st neuron? the value should be between 0 and 400 pA."<< endl;
+	//gestion d'erreur a ajouter
+	cin>> Iext1;
+	cout<< "what is the intensity of the current Iext for the 1st neuron? the value should be between 0 and 400 pA."<< endl;
+	//gestion d'erreur a ajouter
+	cin>> Iext2;
 	double threshold (20);
 
 	Neuron N_1;
+	Neuron N_2;
 	double n;
 	n=(N_1.getTauxRefractory()/h);
-    ofstream out;
-    out.open("potential.txt");
+  ofstream out1;
+	ofstream out2;
+  out1.open("potential1.txt");
+	out2.open("potential2.txt");
+	bool hh (true);
 
-    if (out.fail())
+    if (out1.fail())
     {
         cout<<"Erreur, the file was not opened"<<endl;
-    } else {
+    } else if (out2.fail())
+		{
+			cout<<"Erreur, the file was not opened"<<endl;
+		} else {
 
       while (simtime<t_stop)
         {
-            N_1.update(Iext,h,threshold,simtime,n,out);
-            simtime +=h;
+            N_1.update(Iext1,h,threshold,simtime,n,out1,N_2.getisSpiking());
+						N_2.update(Iext2,h,threshold,simtime,n,out2,N_1.getisSpiking());
+          	simtime +=h;
         }
 
-        cout << "the neuron spiked :"<<N_1.getSpikecount()<<" times"<< endl;
+        cout << "the neuron 1 spiked :"<<N_1.getSpikecount()<<" times"<< endl;
+				cout<< "the neuron 2 spiked :"<<N_2.getSpikecount()<<" times"<<endl;
     }
 
-	out.close();
+	out1.close();
+	out2.close();
 
 	return 0;
 }
