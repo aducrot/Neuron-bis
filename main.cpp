@@ -17,7 +17,7 @@ int main()
 	cout<< "what is the intensity of the current Iext for the 1st neuron? the value should be between 0 and 400 pA."<< endl;
 	//gestion d'erreur a ajouter
 	cin>> Iext2;
-	double threshold (20);
+	//double threshold (20);
 
 	Neuron N_1;
 	Neuron N_2;
@@ -39,8 +39,12 @@ int main()
 
       while (simtime<t_stop)
         {
-            N_1.update(Iext1,h,threshold,simtime,n,out1,N_2.getisSpiking());
-						N_2.update(Iext2,h,threshold,simtime,n,out2,N_1.getisSpiking());
+            N_1.update(Iext1,simtime,N_2.getisSpiking());
+						out1<<N_1.getPotential()<<endl;
+						cout<< "N1 spiking status:" << N_1.getisSpiking()<<endl;
+						N_2.update(Iext2,simtime,N_1.getisSpiking());
+						out2<<N_2.getPotential()<<endl;
+						cout<< "N2 spiking status:" << N_2.getisSpiking()<<endl;
           	simtime +=h;
         }
 

@@ -8,6 +8,7 @@ class Neuron
 {
 	private:
 	double potential_; // V(t)
+	double h_;
 //	double current_; // I(t)
 	int spikecount_; // conteur qui garde en memoir le nombre de spike qui ont ete genere
 	vector <double> spikeTime_; // tableau qui conserve le temps auquel le spike a eu lieu
@@ -20,6 +21,9 @@ class Neuron
 	int Delay_; // the number of h needed to get the delay time
 	vector <int> SumSpike_; // take the number of spikes that happened in 1 h step
 	double J_;
+	double threshold_;
+	double ref_time_;
+	//vector<Neuron> connected_with_;
 
 	public:
 	//constructeur et destructeur
@@ -48,9 +52,11 @@ class Neuron
 	void setConductivity(double c);
 	void setIsSpiking(bool answer);
 	void setClock(double t);
+	//vector <Neuron> connected();
+	void isSpiking_check(double const& Iext, double const& simtime);
 
 	// methodes
-	void update(double const& Iext, double const& h, double const& threshold, double& simtime, double& n, ostream& out, bool ispiking);
+	void update(double const& Iext, double& simtime, bool ispiking);
 
 };
 

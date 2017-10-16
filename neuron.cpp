@@ -4,13 +4,14 @@
 
 /*Constructeur et destructeur*/
 
-Neuron::Neuron (): potential_(0), spikecount_(0),spikeTime_(0), taux_(20),tauxRefractory_(2),
-							conductivity_(1), Res_(taux_/conductivity_), isSpiking_(false),clock_(0),Delay_(15),
-							SumSpike_(Delay_,0), J_(0.1)
+Neuron::Neuron (): potential_(0), spikecount_(0),spikeTime_(0), taux_(20),tauxRefractory_(2), h_(0.1),
+							ref_time_(tauxRefractory_/h_), conductivity_(1), Res_(taux_/conductivity_),
+							threshold_(20), isSpiking_(false),clock_(0),Delay_(15), SumSpike_(Delay_,0), J_(0.1)
+							//,connected_with_(0)
 {}
 
 
-Neuron::Neuron (Neuron const& other)
+Neuron::Neuron (Neuron const& other) // a modifier avec le reste des new values
 {
 	potential_= other.potential_;
 	spikecount_=other.spikecount_;
@@ -113,8 +114,23 @@ const int Neuron::getClock()
 
 //methodes
 
-void Neuron::update(double const& Iext, double const& h, double const& threshold,
-										double& simtime, double& n, ostream& out, bool ispiking)
+void Neuron::isSpiking_check(double const& Iext, double const& simtime)
+{
+	potential_= (exp(-h_/taux_)*potential_)+Iext*Res_*(1-exp(-h_/taux_));
+	if (potential_> threshold_)
+	{
+		isSpiking_=true;
+		spikecount_=spikecount_+1;
+		setSpikeTime(simtime);
+		potential_= 0;
+		ref_time_= tauxRefractory_/h_;
+	} else {
+		isSpiking_=false;
+	}
+
+}
+
+void Neuron::update(double const& Iext, double& simtime, bool ispiking)
 {
 	if (ispiking==true)
 	{
@@ -125,69 +141,33 @@ void Neuron::update(double const& Iext, double const& h, double const& threshold
 	{
 		SumSpike_[i]= SumSpike_[i-1];
 	}
+
 	SumSpike_[0]=0;
 
-	if (n>0)
+	if (ref_time_>0)
 	{
 		isSpiking_=true;
 		potential_=0;
-		n-=1;
-		out<<potential_<<endl;
-
+		ref_time_-=1;
 	} else if (ispiking==true)
 		{
-			if (clock_>=Delay_)
+			if (clock_>=Delay_) // if never spiked ans is already greater then delay
 			{
 				int x=SumSpike_[Delay_-1];// takes last value in table
-				potential_= (exp(-h/taux_)*potential_)+Iext*Res_*(1-exp(-h/taux_)) + x*J_;
+				potential_= (exp(-h_/taux_)*potential_)+Iext*Res_*(1-exp(-h_/taux_)) + x*J_;
 				SumSpike_[Delay_-1]=0;
 				clock_=0;
 
-				if (potential_>threshold)
+				if (potential_>threshold_)
 				{
 					isSpiking_=true;
 					spikecount_=spikecount_+1;
 					setSpikeTime(simtime);
 					potential_= 0;
-					n= tauxRefractory_/h;
-					out<<potential_<< endl;
+					ref_time_= tauxRefractory_/h_;
 				}
-			} else
-			{
-				potential_= (exp(-h/taux_)*potential_)+Iext*Res_*(1-exp(-h/taux_));
-				if (potential_<threshold)
-				{
-					isSpiking_=false;
-					out<<potential_<<endl;
-				}
+			} else { isSpiking_check(Iext,simtime); }
+		} else { isSpiking_check(Iext,simtime); }
 
-				if (potential_> threshold)
-				{
-					isSpiking_=true;
-					spikecount_=spikecount_+1;
-					setSpikeTime(simtime);
-					potential_= 0;
-					n= tauxRefractory_/h;
-					out<<potential_<< endl;
-				}
-			}
-		} else {
-			potential_= (exp(-h/taux_)*potential_)+Iext*Res_*(1-exp(-h/taux_));
-			if (potential_<threshold)
-			{
-				isSpiking_=false;
-				out<<potential_<<endl;
-			}
-
-			if (potential_> threshold)
-			{
-				isSpiking_=true;
-				spikecount_=spikecount_+1;
-				setSpikeTime(simtime);
-				potential_= 0;
-				n= tauxRefractory_/h;
-				out<<potential_<< endl;
-			}
-		}
 		clock_+=1;
 }
