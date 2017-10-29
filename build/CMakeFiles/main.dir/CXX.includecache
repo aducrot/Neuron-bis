@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/main.cpp
+neuron.hpp
+/Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/neuron.hpp
+iostream
+-
+cassert
+-
+random
+-
+
+/Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/neuron.cpp
+neuron.hpp
+/Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/neuron.hpp
+iostream
+-
+cmath
+-
+random
+-
+
+/Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/neuron.hpp
+vector
+-
+fstream
+-
+
