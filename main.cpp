@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void random_connection(vector<Neuron> neuron_sim, int const CE, int const CI, int const nb_exc, int const nb_inh);
+void random_connection(vector <Neuron> neuron_sim, int const CE, int const CI, int const nb_exc, int const nb_inh);
 
 int main()
 {
@@ -34,17 +34,18 @@ int main()
 		Neuron n;
 		Neurons.push_back(n);
 	}
+
 	cout<< "the neuron simulation tableau has been generated"<<endl;
 
-	//! making the connections between the neurons
+	//<! making the connections between the neurons
 	random_connection(Neurons,CE,CI,Excitory_neuron_nb,Inhibitory_neuron_nb);
 	cout<< "the connections have been made"<<endl;
 
 	while (simtime<t_stop)
 	{
-		for (int i(0); i<Neurons.size(); i++)
+		for (size_t i(0); i<Neurons.size(); i++)
 		{
-			Neurons[i].update(simtime);
+			Neurons[i].update(simtime,Neurons);
 		}
 		simtime+=h;
 	}
@@ -54,15 +55,15 @@ int main()
 
 void random_connection(vector <Neuron> neuron_sim, int const CE, int const CI, int const nb_exc, int const nb_inh)
 {
-	for (int i(0); i< neuron_sim.size(); ++i)
+	for (size_t i(0); i< neuron_sim.size(); ++i)
 	{
-		vector <Neuron> connexion_matrix (CE+CI);
+		vector <int> connexion_matrix (CE+CI); //!< uses index associated with neuron
 		for (int j(0); j< CE; j++)
 		{
 			random_device rd;
 			mt19937 eng(rd());
 			uniform_int_distribution<int> distr(0,nb_exc);
-			connexion_matrix.push_back(neuron_sim[distr(eng)]);
+			connexion_matrix.push_back(distr(eng));
 			neuron_sim[j].setConnexion(connexion_matrix);
 		}
 		for (int k(0); k<CI; k++)
@@ -70,7 +71,7 @@ void random_connection(vector <Neuron> neuron_sim, int const CE, int const CI, i
 			random_device rd;
 			mt19937 eng(rd());
 			uniform_int_distribution<int> distr(nb_exc+1,nb_exc+nb_inh);
-			connexion_matrix.push_back(neuron_sim[distr(eng)]);
+			connexion_matrix.push_back(distr(eng));
 			neuron_sim[k].setConnexion(connexion_matrix);
 		}
 	}
