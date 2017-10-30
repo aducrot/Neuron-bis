@@ -8,7 +8,8 @@
 
 Neuron::Neuron (): potential_(0), spikecount_(0),spikeTime_(0), taux_(20),tauxRefractory_(2), h_(0.1), Iext_(0),
 							ref_time_(tauxRefractory_/h_), conductivity_(1), Res_(taux_/conductivity_),
-							threshold_(20), isSpiking_(false),clock_(0),Delay_(15), Buffer_(Delay_+1,0.0), J_(0.1),connected_with_(0)
+							threshold_(20), isSpiking_(false),clock_(0),Delay_(15), Buffer_(Delay_+1,0.0), J_(0.1),
+							isExcitory(false)
 {}
 
 Neuron::~Neuron()
@@ -95,9 +96,10 @@ int Neuron::getClock() const
 	return clock_;
 }
 
-void Neuron::setConnexion (vector <int>const& connexion_matrix)
+void Neuron::setConnexion (int const neuron_index)
 {
-	connected_with_=connexion_matrix;
+	//connected_with_=connexion_matrix;
+	connected_with_.push_back(neuron_index);
 }
 
 void Neuron::setBuffer()
@@ -105,15 +107,23 @@ void Neuron::setBuffer()
 	Buffer_[(clock_+Delay_)%Buffer_.size()]+=1;
 }
 
+void Neuron::setBool()
+{
+	isExcitory=true;
+}
+
+vector<int> Neuron::getConnection() const
+{
+	return connected_with_;
+}
+
+
 //!<Methodes
 void Neuron::give_spike(vector<Neuron>& neuron_sim)
 {
-	if (isSpiking_)
+	for (size_t i(0); i<connected_with_.size(); ++i)
 	{
-		for (int i(0); i<connected_with_.size(); ++i)
-		{
-			neuron_sim[connected_with_[i]].setBuffer();
-		}
+		neuron_sim[connected_with_[i]].setBuffer();
 	}
 }
 
@@ -126,24 +136,42 @@ void Neuron::update(double& simtime, vector<Neuron>& neuron_sim)
 	poisson_distribution<> p(lambda);
 
 	double background_(static_cast<double> (p(gen))); //!<intialise the background stimulation every time step
+	//cout << "background noise:"<< background_<<endl;
 
-	if (ref_time_>=0)
+	if (ref_time_>0)
 	{
 		potential_=0;
 		ref_time_-=1;
-		isSpiking_=true; // a verifier.... essayer true si ca marche pas...
+		isSpiking_=false;
 	} else {
 		assert(clock_%Buffer_.size()<Buffer_.size());
-		potential_= (exp(-h_/taux_)*potential_)+Iext_*Res_*(1-exp(-h_/taux_))+(Buffer_[clock_%Buffer_.size()]+background_)*J_;
+		assert(Buffer_.size()==(Delay_+1));
+
+		if (isExcitory)
+		{
+			potential_= (exp(-h_/taux_)*potential_)+Iext_*Res_*(1-exp(-h_/taux_))+
+									(Buffer_[clock_%Buffer_.size()]*J_)+ background_*J_;
+			assert(potential_>0.0);
+		} else {
+			potential_= (exp(-h_/taux_)*potential_)+Iext_*Res_*(1-exp(-h_/taux_))+
+									(Buffer_[clock_%Buffer_.size()])*(-0.5) + background_*J_;
+			assert(potential_>0.0);
+		}
+
+		cout<< "test"<< background_<<endl;
+		cout<< "in buffer:" <<Buffer_[clock_%Buffer_.size()]<<endl;
+		cout<<"le potentiel vaut: "<< potential_<<endl;
+
+		assert(clock_%Buffer_.size()>=0);
 		Buffer_[clock_%Buffer_.size()]=0;
-		setSpikecount();
-		setSpikeTime(simtime);
-		ref_time_= tauxRefractory_/h_;
 
 		if(potential_>threshold_)
 		{
 			isSpiking_=true;
 			give_spike(neuron_sim);
+			setSpikecount();
+			setSpikeTime(simtime);
+			ref_time_= tauxRefractory_/h_;
 		} else {
 			isSpiking_=false;
 		}

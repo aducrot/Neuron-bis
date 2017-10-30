@@ -24,6 +24,7 @@ class Neuron
 	double threshold_;//!< membrane potential above which the neuron spikes
 	double ref_time_;//!< refractory time in time steps
 	vector <int> connected_with_;//!< neurons that are connected with it using their index
+	bool isExcitory;
 
 	public:
 	//!<constructor and destructor
@@ -40,6 +41,7 @@ class Neuron
 	double getConductivity() const;
 	int getClock() const;
 	bool getisSpiking() const;
+	vector<int> getConnection() const;
 
 	void setPotential(double p);
 	void setSpikecount ();
@@ -48,8 +50,10 @@ class Neuron
 	void setConductivity(double c);
 	void setIsSpiking(bool answer);
 	void setClock(double t);
-	void setConnexion (vector <int>const& connexion_matrix);
+	void setConnexion (int const neuron_index);
 	void setBuffer();
+	void setBool();
+
 
 	//!< Methodes
 	void update(double& simtime,vector<Neuron>& neuron_sim);

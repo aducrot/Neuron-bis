@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void random_connection(vector <Neuron> neuron_sim, int const CE, int const CI, int const nb_exc, int const nb_inh);
+void random_connection(vector <Neuron>& neuron_sim, int const CE, int const CI, int const nb_exc, int const nb_inh);
 
 int main()
 {
@@ -15,65 +15,96 @@ int main()
 	int number_Neuron_sim;
 	cout << "how many neurons must be generated?" << endl;
 	cin >> number_Neuron_sim;
-	int const Excitory_neuron_nb (0.8*number_Neuron_sim);
-	int const Inhibitory_neuron_nb (0.2*number_Neuron_sim);
-	int const CE (0.1*Excitory_neuron_nb);
-	int const CI (0.1*Inhibitory_neuron_nb);
 
-	vector< Neuron > Neurons (number_Neuron_sim); //! vector of all neurons in simulation
+	double nb_exc = 0.8*number_Neuron_sim;
+	double nb_inh = 0.2*number_Neuron_sim;
 
-	//! initialisation of the neurons in the simulation: exhibitory and inhibitory
-	for (int i(0); i< Excitory_neuron_nb; ++i)
+	int const Excitory_neuron_nb (static_cast<int>(nb_exc));
+	int const Inhibitory_neuron_nb (static_cast<int>(nb_inh));
+
+
+	double CE_temp = 0.1*Excitory_neuron_nb;
+	double CI_temp =0.1*Inhibitory_neuron_nb;
+
+	int const CE (static_cast<int>(CE_temp));
+	int const CI (static_cast<int>(CI_temp));
+
+	ofstream out;
+	out.open("spiketime.txt");
+
+	if(out.fail())
 	{
-		Neuron n;
-		Neurons.push_back(n);
-	}
+		cout<< "the file failed to open correctly"<<endl;
+	} else{
 
-	for (int j(0); j< Inhibitory_neuron_nb; ++j)
-	{
-		Neuron n;
-		Neurons.push_back(n);
-	}
-
-	cout<< "the neuron simulation tableau has been generated"<<endl;
-
-	//<! making the connections between the neurons
-	random_connection(Neurons,CE,CI,Excitory_neuron_nb,Inhibitory_neuron_nb);
-	cout<< "the connections have been made"<<endl;
-
-	while (simtime<t_stop)
-	{
-		for (size_t i(0); i<Neurons.size(); i++)
+		vector< Neuron > Neurons; //!< vector of all neurons in simulation
+		//!< initialisation of the neurons in the simulation: exhibitory and inhibitory
+		for (int i(0); i< Excitory_neuron_nb; ++i)
 		{
-			Neurons[i].update(simtime,Neurons);
+			Neuron n;
+			n.setBool();
+			Neurons.push_back(n);
 		}
-		simtime+=h;
+
+		for (int j(0); j< Inhibitory_neuron_nb; ++j)
+		{
+			Neuron n;
+			Neurons.push_back(n);
+		}
+
+		cout<< "the neuron simulation vector has been generated"<<endl;
+
+		//<! making the connections between the neurons
+		random_connection(Neurons,CE,CI,Excitory_neuron_nb,Inhibitory_neuron_nb);
+
+		cout<< "the connections have been made"<<endl;
+
+		while (simtime<t_stop)
+		{
+			for (size_t i(0); i<Neurons.size(); i++)
+			{
+				cout<< "neuron"<<i<< endl;
+				Neurons[i].update(simtime,Neurons);
+			}
+			simtime+=h;
+		}
+
+		for (size_t i(0); i< Neurons.size(); ++i)
+		{
+			for(auto time: Neurons[i].getSpiketime())
+			{
+				out << time << '\t' <<i<< '\n';
+			}
+		}
+		cout<< "end of program"<<endl;
 	}
-	cout<< "end of program"<<endl;
-	return 0;
+
+out.close();
+return 0;
+
 }
 
-void random_connection(vector <Neuron> neuron_sim, int const CE, int const CI, int const nb_exc, int const nb_inh)
+void random_connection(vector <Neuron>& neuron_sim, int const CE, int const CI, int const nb_exc, int const nb_inh)
 {
 	for (size_t i(0); i< neuron_sim.size(); ++i)
 	{
-		vector <int> connexion_matrix (CE+CI); //!< uses index associated with neuron
+		//vector <int> connexion_matrix; //!< uses index associated with neuron
 		for (int j(0); j< CE; j++)
 		{
 			random_device rd;
 			mt19937 eng(rd());
 			uniform_int_distribution<int> distr(0,nb_exc);
-			connexion_matrix.push_back(distr(eng));
-			neuron_sim[j].setConnexion(connexion_matrix);
+			//connexion_matrix.push_back(distr(eng));
+			neuron_sim[i].setConnexion(distr(eng));
 		}
 		for (int k(0); k<CI; k++)
 		{
 			random_device rd;
 			mt19937 eng(rd());
 			uniform_int_distribution<int> distr(nb_exc+1,nb_exc+nb_inh);
-			connexion_matrix.push_back(distr(eng));
-			neuron_sim[k].setConnexion(connexion_matrix);
+			//connexion_matrix.push_back(distr(eng));
+			neuron_sim[i].setConnexion(distr(eng));
 		}
+		//neuron_sim[i].setConnexion(connexion_matrix);
 	}
-
 }
