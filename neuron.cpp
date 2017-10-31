@@ -98,7 +98,6 @@ int Neuron::getClock() const
 
 void Neuron::setConnexion (int const neuron_index)
 {
-	//connected_with_=connexion_matrix;
 	connected_with_.push_back(neuron_index);
 }
 
@@ -130,12 +129,12 @@ void Neuron::give_spike(vector<Neuron>& neuron_sim)
 void Neuron::update(double& simtime, vector<Neuron>& neuron_sim)
 {
 	double lambda(2); //!<poisson probability of receiving spike from the rest of the brain, can
-										//!<be calculated using vext/vth = 2 ==> the average firing rate is 2 spikes per time step
+										//!<be calculated using nu_ext*h = 2 ==> the average firing rate is 2 spikes per time step
 	random_device rd;
 	mt19937 gen(rd());
 	poisson_distribution<> p(lambda);
 
-	double background_(static_cast<double> (p(gen))); //!<intialise the background stimulation every time step
+	int background_(p(gen)); //!<intialise the background stimulation every time step
 	//cout << "background noise:"<< background_<<endl;
 
 	if (ref_time_>0)
@@ -146,23 +145,19 @@ void Neuron::update(double& simtime, vector<Neuron>& neuron_sim)
 	} else {
 		assert(clock_%Buffer_.size()<Buffer_.size());
 		assert(Buffer_.size()==(Delay_+1));
+		assert(clock_%Buffer_.size()>=0);
 
 		if (isExcitory)
 		{
 			potential_= (exp(-h_/taux_)*potential_)+Iext_*Res_*(1-exp(-h_/taux_))+
 									(Buffer_[clock_%Buffer_.size()]*J_)+ background_*J_;
-			assert(potential_>0.0);
 		} else {
 			potential_= (exp(-h_/taux_)*potential_)+Iext_*Res_*(1-exp(-h_/taux_))+
 									(Buffer_[clock_%Buffer_.size()])*(-0.5) + background_*J_;
-			assert(potential_>0.0);
 		}
 
-		cout<< "test"<< background_<<endl;
-		cout<< "in buffer:" <<Buffer_[clock_%Buffer_.size()]<<endl;
-		cout<<"le potentiel vaut: "<< potential_<<endl;
-
 		assert(clock_%Buffer_.size()>=0);
+
 		Buffer_[clock_%Buffer_.size()]=0;
 
 		if(potential_>threshold_)
