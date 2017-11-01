@@ -20,11 +20,12 @@ class Neuron
 	bool isSpiking_; //!< boolean test to know if the neuron has spiked.
 	int Delay_; //!< Delay time initialised in contructor in number of time steps
 	vector <int> Buffer_; //!< keeps track of the number of spikes received at each time step
-	double J_; //!< the potential increase of the mebran whne it receives a spike (including from rest of the brain)
+	double J_; //!< the potential increase of the mebran whne it receives a spike
+						//!<(including from rest of the brain)
 	double threshold_;//!< membrane potential above which the neuron spikes
 	double ref_time_;//!< refractory time in time steps
 	vector <int> connected_with_;//!< neurons that are connected with it using their index
-	bool isExcitory;
+	bool isExcitory;//!< check is the neuron is of type Excitory
 
 	public:
 	//!<constructor and destructor
@@ -32,32 +33,64 @@ class Neuron
 	~Neuron ();
 
 	//!< Getteurs et Setteurs
+	/**
+	@return double potential_
+	*/
 	double getPotential() const;
-	int getSpikecount() const;
-	vector <double> getSpiketime() const;
-	double getTaux() const;
-	double getTauxRefractory() const;
-	double getRes() const;
-	double getConductivity() const;
-	int getClock() const;
-	bool getisSpiking() const;
-	vector<int> getConnection() const;
 
-	void setPotential(double p);
-	void setSpikecount ();
-	void setSpikeTime(double t);
-	void setRes(double r);
-	void setConductivity(double c);
-	void setIsSpiking(bool answer);
-	void setClock(double t);
-	void setConnexion (int const neuron_index);
-	void setBuffer();
-	void setBool();
+	/**
+	@return int spikecount_
+	*/
+	int getSpikecount() const;
+
+	/**
+	@return vector spikeTime_
+	*/
+	vector <double> getSpiketime() const;
+
+	/**
+	@return bool isSpiking_
+	*/
+	bool getisSpiking() const;
+
+	/**
+	@return vector connected_with_
+	*/
+	vector<int> getConnection() const;
+	/**
+	@return vector connected_with_
+	*/
+
+	void setSpikecount ();//!< sets the spike count of the neuron
+
+	/**
+	@param double time
+	places spike time in the attribut spikeTime_
+	*/
+	void setSpikeTime(double t);//!< sets the time of the spike in the vector spikeTime_
+
+	/**
+	@param int const neuron_index
+	sets the connected_with_ vector
+	*/
+	void setConnexion (int const neuron_index);//!< sets the connected_with_ vector
+	void setBuffer();//!< sets the Buffer_ of the target neuron at the correct place
+	void setBool();//!< sets boolean isExcitory to true for Excitory neurons
+	void setJ_();//!< sets the J_ value for inhibitory neurons (J=-0.5)
 
 
 	//!< Methodes
+	/**
+	@param double& simtime, vector<Neuron>& neuron_sim;
+	update the potential of the neuron depending on if its in refractory time or not.
+	It also sets the buffer of the target neurons if it has spiked
+	*/
 	void update(double& simtime,vector<Neuron>& neuron_sim);
-	void give_spike(vector<Neuron>& neuron_sim);//!< puts spike in the buffer of the neurons connected with it
+	/**
+	@param vector<Neuron>& neuron_sim
+	puts spike in the buffer of the neurons connected with it
+	*/
+	void give_spike(vector<Neuron>& neuron_sim);
 
 };
 

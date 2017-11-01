@@ -16,11 +16,6 @@ Neuron::~Neuron()
 {}
 
 //!<Getteur et Setteur
-double Neuron::getPotential() const
-{
-	return potential_;
-}
-
 int Neuron::getSpikecount() const
 {
 	return spikecount_;
@@ -29,21 +24,6 @@ int Neuron::getSpikecount() const
 vector <double> Neuron::getSpiketime() const
 {
 	return spikeTime_;
-}
-
-double Neuron:: getRes() const
-{
-	return Res_;
-}
-
-double Neuron::getConductivity() const
-{
-	return conductivity_;
-}
-
-void Neuron::setPotential(double p)
-{
-	potential_=p;
 }
 
 void Neuron::setSpikecount()
@@ -56,44 +36,9 @@ void Neuron::setSpikeTime(double t)
 	spikeTime_.push_back(t);
 }
 
-void Neuron::setConductivity(double c)
-{
-	conductivity_=c;
-}
-
-void Neuron::setRes(double r)
-{
-	Res_=r;
-}
-
-void Neuron::setClock(double t)
-{
-	clock_=t;
-}
-
-void Neuron::setIsSpiking(bool answer)
-{
-	isSpiking_=answer;
-}
-
-double Neuron::getTaux() const
-{
-	return taux_;
-}
-
-double Neuron::getTauxRefractory() const
-{
-	return tauxRefractory_;
-}
-
 bool Neuron::getisSpiking() const
 {
 	return isSpiking_;
-}
-
-int Neuron::getClock() const
-{
-	return clock_;
 }
 
 void Neuron::setConnexion (int const neuron_index)
@@ -103,7 +48,7 @@ void Neuron::setConnexion (int const neuron_index)
 
 void Neuron::setBuffer()
 {
-	Buffer_[(clock_+Delay_)%Buffer_.size()]+=1;
+	Buffer_[(clock_+Delay_)%Buffer_.size()]+=J_;
 }
 
 void Neuron::setBool()
@@ -114,6 +59,11 @@ void Neuron::setBool()
 vector<int> Neuron::getConnection() const
 {
 	return connected_with_;
+}
+
+void Neuron::setJ_()
+{
+	J_=-0.5;
 }
 
 
@@ -130,12 +80,12 @@ void Neuron::update(double& simtime, vector<Neuron>& neuron_sim)
 {
 	double lambda(2); //!<poisson probability of receiving spike from the rest of the brain, can
 										//!<be calculated using nu_ext*h = 2 ==> the average firing rate is 2 spikes per time step
-	random_device rd;
-	mt19937 gen(rd());
-	poisson_distribution<> p(lambda);
+	static random_device rd;
+	static mt19937 gen(rd());
+	assert(lambda>0);
+	static poisson_distribution<> p(lambda);
 
 	int background_(p(gen)); //!<intialise the background stimulation every time step
-	//cout << "background noise:"<< background_<<endl;
 
 	if (ref_time_>0)
 	{
@@ -143,22 +93,10 @@ void Neuron::update(double& simtime, vector<Neuron>& neuron_sim)
 		ref_time_-=1;
 		isSpiking_=false;
 	} else {
+
 		assert(clock_%Buffer_.size()<Buffer_.size());
 		assert(Buffer_.size()==(Delay_+1));
 		assert(clock_%Buffer_.size()>=0);
-
-		if (isExcitory)
-		{
-			potential_= (exp(-h_/taux_)*potential_)+Iext_*Res_*(1-exp(-h_/taux_))+
-									(Buffer_[clock_%Buffer_.size()]*J_)+ background_*J_;
-		} else {
-			potential_= (exp(-h_/taux_)*potential_)+Iext_*Res_*(1-exp(-h_/taux_))+
-									(Buffer_[clock_%Buffer_.size()])*(-0.5) + background_*J_;
-		}
-
-		assert(clock_%Buffer_.size()>=0);
-
-		Buffer_[clock_%Buffer_.size()]=0;
 
 		if(potential_>threshold_)
 		{
@@ -167,8 +105,12 @@ void Neuron::update(double& simtime, vector<Neuron>& neuron_sim)
 			setSpikecount();
 			setSpikeTime(simtime);
 			ref_time_= tauxRefractory_/h_;
+			assert (ref_time_>0);
 		} else {
 			isSpiking_=false;
+			potential_= (exp(-h_/taux_)*potential_)+Iext_*Res_*(1-exp(-h_/taux_))+
+									Buffer_[clock_%Buffer_.size()]+ background_*0.1;
+			Buffer_[clock_%Buffer_.size()]=0;
 		}
 	}
 		clock_+=1;

@@ -5,29 +5,33 @@
 
 using namespace std;
 
-void random_connection(vector <Neuron>& neuron_sim, int const CE, int const CI, int const nb_exc, int const nb_inh);
+void random_connection(vector <Neuron>& neuron_sim, int const CE, int const CI,
+												int const nb_exc, int const nb_inh);//!< method that will generate random connections.
+												//!<The values generated will correspond to the neurons index and will be stored in
+												//!< the neuron's attribut connected_with_.
 
 int main()
 {
-	double t_stop (1000);
-	double h (0.1);
-	double simtime (0);
-	int number_Neuron_sim;
+	double t_stop (1000);//!< total simulation time
+	double h (0.1);//!< time step
+	double simtime (0);//!< Simulation time
+	int number_Neuron_sim;//!<numbers of neurons in the simulation
 	cout << "how many neurons must be generated?" << endl;
 	cin >> number_Neuron_sim;
+
 
 	double nb_exc = 0.8*number_Neuron_sim;
 	double nb_inh = 0.2*number_Neuron_sim;
 
-	int const Excitory_neuron_nb (static_cast<int>(nb_exc));
-	int const Inhibitory_neuron_nb (static_cast<int>(nb_inh));
+	int const Excitory_neuron_nb (static_cast<int>(nb_exc));//!< number of Excitory neurons in the simulation
+	int const Inhibitory_neuron_nb (static_cast<int>(nb_inh));//!< number of Inhibitory neurons in the simulation
 
 
 	double CE_temp = 0.1*Excitory_neuron_nb;
 	double CI_temp =0.1*Inhibitory_neuron_nb;
 
-	int const CE (static_cast<int>(CE_temp));
-	int const CI (static_cast<int>(CI_temp));
+	int const CE (static_cast<int>(CE_temp));//!< number of excitory connections per neuron
+	int const CI (static_cast<int>(CI_temp));//!< number of inhibitory connections per neuron
 
 	ofstream out;
 	out.open("spiketime.txt");
@@ -38,20 +42,20 @@ int main()
 	} else{
 
 		vector< Neuron > Neurons; //!< vector of all neurons in simulation
+
 		//!< initialisation of the neurons in the simulation: exhibitory and inhibitory
 		for (int i(0); i< Excitory_neuron_nb; ++i)
 		{
 			Neuron n;
-			n.setBool();
+			n.setBool();//!< the neurons are by default inhibitory
 			Neurons.push_back(n);
-			//cout << "Excitory_neuron neuron" << i+1<< endl;
 		}
 
 		for (int j(0); j< Inhibitory_neuron_nb; ++j)
 		{
 			Neuron n;
+			n.setJ_();//!< the J by default was Je(excitory =0.1)
 			Neurons.push_back(n);
-			//cout << "Inhibitory_ neuron" << j+1<< endl;
 		}
 
 		cout<< "the neuron simulation vector has been generated"<<endl;
@@ -85,20 +89,22 @@ return 0;
 
 }
 
-void random_connection(vector <Neuron>& neuron_sim, int const CE, int const CI, int const nb_exc, int const nb_inh)
+void random_connection(vector <Neuron>& neuron_sim, int const CE, int const CI,
+												int const nb_exc, int const nb_inh)
 {
-
 	random_device rd;
 	mt19937 eng(rd());
-	uniform_int_distribution<int> distr(0,nb_exc-1);
+	uniform_int_distribution<int> distr(0,nb_exc-1);//!<the range is as large as
+																					//!<the number of excitory neurons.
+																					//!<it corresponds to the indeces of excitory
+																					//!<neurons in the vector Neuron_sim
 
 	random_device rd2;
 	mt19937 eng2(rd2());
-	uniform_int_distribution<int> distr2(nb_exc+1,nb_exc+nb_inh-1);
-
- cout << "neuorn sim sizee: "<< neuron_sim.size()<<endl;
- cout << "CE" << CE <<endl;
- cout << "CI" << CI << endl;
+	uniform_int_distribution<int> distr2(nb_exc+1,nb_exc+nb_inh-1);//!<the range is as large as
+																					//!<the number of inhibitory neurons.
+																					//!<it corresponds to the indeces of
+																					//!<inhibitory neurons in the vector Neuron_sim
 
 	for (size_t i(0); i< neuron_sim.size(); ++i)
 	{
@@ -110,8 +116,7 @@ void random_connection(vector <Neuron>& neuron_sim, int const CE, int const CI, 
 
 		for (int k(0); k<CI; ++k)
 		{
-			neuron_sim[i].setConnexion(distr2(eng2));
+			neuron_sim[i].setConnexion(distr2(eng2)); //!< sets the attribut connected_with_
 		}
-		//neuron_sim[i].setConnexion(connexion_matrix);
 	}
 }
