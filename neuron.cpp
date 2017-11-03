@@ -16,58 +16,81 @@ Neuron::~Neuron()
 {}
 
 //!<Getteur et Setteur
+/**
+@return int spikecount_
+*/
 int Neuron::getSpikecount() const
 {
 	return spikecount_;
 }
 
+/**
+@return vector spikeTime_
+*/
 vector <double> Neuron::getSpiketime() const
 {
 	return spikeTime_;
 }
 
-void Neuron::setSpikecount()
+void Neuron::setSpikecount()  //!< sets the spike count of the neuron
 {
 	spikecount_= spikecount_+1;
 }
 
-void Neuron::setSpikeTime(double t)
+/**
+@param double time
+places spike time in the attribut spikeTime_
+*/
+void Neuron::setSpikeTime(double t)//!< sets the time of the spike in the vector spikeTime_
 {
 	spikeTime_.push_back(t);
 }
 
+/**
+@return bool isSpiking_
+*/
 bool Neuron::getisSpiking() const
 {
 	return isSpiking_;
 }
-
-void Neuron::setConnexion (int const neuron_index)
+\/**
+@param int const neuron_index
+sets the connected_with_ vector
+*/
+void Neuron::setConnexion (int const neuron_index) //!< sets the connected_with_ vector
 {
 	connected_with_.push_back(neuron_index);
 }
 
-void Neuron::setBuffer()
+void Neuron::setBuffer() //!< sets the Buffer_ of the target neuron at the correct place
 {
 	Buffer_[(clock_+Delay_)%Buffer_.size()]+=J_;
 }
 
-void Neuron::setBool()
+void Neuron::setBool() //!< sets boolean isExcitory to true for Excitory neurons
 {
 	isExcitory=true;
 }
 
+/**
+@return vector connected_with_
+*/
 vector<int> Neuron::getConnection() const
 {
 	return connected_with_;
 }
 
-void Neuron::setJ_()
+void Neuron::setJ_() //!< sets the J_ value for inhibitory neurons (J=-0.5)
 {
 	J_=-0.5;
 }
 
 
 //!<Methodes
+/**
+@param vector<Neuron>& neuron_sim
+puts spike in the buffer of the neurons connected with it
+*/
 void Neuron::give_spike(vector<Neuron>& neuron_sim)
 {
 	for (size_t i(0); i<connected_with_.size(); ++i)
@@ -76,6 +99,11 @@ void Neuron::give_spike(vector<Neuron>& neuron_sim)
 	}
 }
 
+/**
+@param double& simtime, vector<Neuron>& neuron_sim;
+update the potential of the neuron depending on if its in refractory time or not.
+It also sets the buffer of the target neurons if it has spiked
+*/
 void Neuron::update(double& simtime, vector<Neuron>& neuron_sim)
 {
 	double lambda(2); //!<poisson probability of receiving spike from the rest of the brain, can
