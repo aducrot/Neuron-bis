@@ -17,7 +17,7 @@ Neuron::~Neuron()
 
 //!<Getteur et Setteur
 /**
-@return int spikecount_
+* @return int spikecount_
 */
 int Neuron::getSpikecount() const
 {
@@ -25,7 +25,7 @@ int Neuron::getSpikecount() const
 }
 
 /**
-@return vector spikeTime_
+* @return vector spikeTime_
 */
 vector <double> Neuron::getSpiketime() const
 {
@@ -38,8 +38,8 @@ void Neuron::setSpikecount()  //!< sets the spike count of the neuron
 }
 
 /**
-@param double time
-places spike time in the attribut spikeTime_
+* @param double time
+* places spike time in the attribut spikeTime_
 */
 void Neuron::setSpikeTime(double t)//!< sets the time of the spike in the vector spikeTime_
 {
@@ -47,15 +47,15 @@ void Neuron::setSpikeTime(double t)//!< sets the time of the spike in the vector
 }
 
 /**
-@return bool isSpiking_
+* @return bool isSpiking_
 */
 bool Neuron::getisSpiking() const
 {
 	return isSpiking_;
 }
-\/**
-@param int const neuron_index
-sets the connected_with_ vector
+/**
+* @param int const neuron_index
+* sets the connected_with_ vector
 */
 void Neuron::setConnexion (int const neuron_index) //!< sets the connected_with_ vector
 {
@@ -73,7 +73,7 @@ void Neuron::setBool() //!< sets boolean isExcitory to true for Excitory neurons
 }
 
 /**
-@return vector connected_with_
+* @return vector connected_with_
 */
 vector<int> Neuron::getConnection() const
 {
@@ -88,8 +88,8 @@ void Neuron::setJ_() //!< sets the J_ value for inhibitory neurons (J=-0.5)
 
 //!<Methodes
 /**
-@param vector<Neuron>& neuron_sim
-puts spike in the buffer of the neurons connected with it
+* @param vector<Neuron>& neuron_sim
+* puts spike in the buffer of the neurons connected with it
 */
 void Neuron::give_spike(vector<Neuron>& neuron_sim)
 {
@@ -100,9 +100,9 @@ void Neuron::give_spike(vector<Neuron>& neuron_sim)
 }
 
 /**
-@param double& simtime, vector<Neuron>& neuron_sim;
-update the potential of the neuron depending on if its in refractory time or not.
-It also sets the buffer of the target neurons if it has spiked
+* update the potential of the neuron depending on if its in refractory time or not.
+* It also sets the buffer of the target neurons if it has spiked
+* @param double& simtime, vector<Neuron>& neuron_sim
 */
 void Neuron::update(double& simtime, vector<Neuron>& neuron_sim)
 {

@@ -20,7 +20,7 @@ class Neuron
 	bool isSpiking_; //!< boolean test to know if the neuron has spiked.
 	int Delay_; //!< Delay time initialised in contructor in number of time steps
 	vector <int> Buffer_; //!< keeps track of the number of spikes received at each time step
-	double J_; //!< the potential increase of the mebran whne it receives a spike
+	double J_; //!< the potential increase of the mebran when it receives a spike
 						//!<(including from rest of the brain)
 	double threshold_;//!< membrane potential above which the neuron spikes
 	double ref_time_;//!< refractory time in time steps
