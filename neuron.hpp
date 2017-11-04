@@ -26,6 +26,7 @@ class Neuron
 	double ref_time_;//!< refractory time in time steps
 	vector <int> connected_with_;//!< neurons that are connected with it using their index
 	bool isExcitory;//!< check is the neuron is of type Excitory
+	double eta_;//!< nu_ext*h
 
 	public:
 	//!<constructor and destructor
@@ -43,6 +44,8 @@ class Neuron
 	void setBuffer();
 	void setBool();
 	void setJ_();
+	void setJ_(double g);
+	void setEta_(double eta);
 
 	//!< Methodes
 	void update(double& simtime,vector<Neuron>& neuron_sim);

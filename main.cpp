@@ -12,13 +12,21 @@ void random_connection(vector <Neuron>& neuron_sim, int const CE, int const CI,
 
 int main()
 {
-	double t_stop (1000);//!< total simulation time
+	double g;
+	double eta;
+	double t_stop (100);//!< total simulation time
 	double h (0.1);//!< time step
 	double simtime (0);//!< Simulation time
 	int number_Neuron_sim;//!<numbers of neurons in the simulation
 	cout << "how many neurons must be generated?" << endl;
 	cin >> number_Neuron_sim;
+	cout << "what is the value of nu_ext/nu_threshold ?"<<endl;
+	cin >> eta;
+	cout<< "what is the weight of the inhibitory neuorns (g)?" <<endl;
+	cin >> g;
 
+	assert (g>=0);
+	assert (eta>=0);
 
 	double nb_exc = 0.8*number_Neuron_sim;
 	double nb_inh = 0.2*number_Neuron_sim;
@@ -48,13 +56,15 @@ int main()
 		{
 			Neuron n;
 			n.setBool();//!< the neurons are by default inhibitory
+			n.setEta_(eta);
 			Neurons.push_back(n);
 		}
 
 		for (int j(0); j< Inhibitory_neuron_nb; ++j)
 		{
 			Neuron n;
-			n.setJ_();//!< the J by default was Je(excitory =0.1)
+			n.setJ_(g);//!< the J by default was Je(excitory =0.1)
+			n.setEta_(eta);
 			Neurons.push_back(n);
 		}
 

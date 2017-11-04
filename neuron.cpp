@@ -9,7 +9,7 @@
 Neuron::Neuron (): potential_(0), spikecount_(0),spikeTime_(0), taux_(20),tauxRefractory_(2), h_(0.1), Iext_(0),
 							ref_time_(tauxRefractory_/h_), conductivity_(1), Res_(taux_/conductivity_),
 							threshold_(20), isSpiking_(false),clock_(0),Delay_(15), Buffer_(Delay_+1,0.0), J_(0.1),
-							isExcitory(false)
+							isExcitory(false), eta_(2)
 {}
 
 Neuron::~Neuron()
@@ -85,6 +85,15 @@ void Neuron::setJ_() //!< sets the J_ value for inhibitory neurons (J=-0.5)
 	J_=-0.5;
 }
 
+void Neuron::setJ_(double g)
+{
+	J_=static_cast<double> (-g/0.1);
+}
+
+void Neuron::setEta_(double eta)
+{
+	eta_=eta;
+}
 
 //!<Methodes
 /**
@@ -106,7 +115,7 @@ void Neuron::give_spike(vector<Neuron>& neuron_sim)
 */
 void Neuron::update(double& simtime, vector<Neuron>& neuron_sim)
 {
-	double lambda(2); //!<poisson probability of receiving spike from the rest of the brain, can
+	double lambda(eta_); //!<poisson probability of receiving spike from the rest of the brain, can
 										//!<be calculated using nu_ext*h = 2 ==> the average firing rate is 2 spikes per time step
 	static random_device rd;
 	static mt19937 gen(rd());
@@ -120,6 +129,8 @@ void Neuron::update(double& simtime, vector<Neuron>& neuron_sim)
 		potential_=0;
 		ref_time_-=1;
 		isSpiking_=false;
+
+
 	} else {
 
 		assert(clock_%Buffer_.size()<Buffer_.size());
@@ -133,13 +144,14 @@ void Neuron::update(double& simtime, vector<Neuron>& neuron_sim)
 			setSpikecount();
 			setSpikeTime(simtime);
 			ref_time_= tauxRefractory_/h_;
+
 			assert (ref_time_>0);
 		} else {
 			isSpiking_=false;
 			potential_= (exp(-h_/taux_)*potential_)+Iext_*Res_*(1-exp(-h_/taux_))+
 									Buffer_[clock_%Buffer_.size()]+ background_*0.1;
-			Buffer_[clock_%Buffer_.size()]=0;
 		}
 	}
+		Buffer_[clock_%Buffer_.size()]=0;
 		clock_+=1;
 }
