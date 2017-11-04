@@ -6,7 +6,7 @@
 
 //!<Constructeur et destructeur
 
-Neuron::Neuron (): potential_(0), spikecount_(0),spikeTime_(0), taux_(20),tauxRefractory_(2), h_(0.1), Iext_(0),
+Neuron::Neuron (): potential_(0.0), spikecount_(0),spikeTime_(0), taux_(20),tauxRefractory_(2), h_(0.1), Iext_(0),
 							ref_time_(tauxRefractory_/h_), conductivity_(1), Res_(taux_/conductivity_),
 							threshold_(20), isSpiking_(false),clock_(0),Delay_(15), Buffer_(Delay_+1,0.0), J_(0.1),
 							isExcitory(false), eta_(2)
@@ -22,6 +22,11 @@ Neuron::~Neuron()
 int Neuron::getSpikecount() const
 {
 	return spikecount_;
+}
+
+double Neuron::getPotential() const
+{
+	return potential_;
 }
 
 /**
@@ -53,6 +58,13 @@ bool Neuron::getisSpiking() const
 {
 	return isSpiking_;
 }
+
+vector<int> Neuron::getBuffer() const
+{
+	return Buffer_;
+}
+
+
 /**
 * @param int const neuron_index
 * sets the connected_with_ vector

@@ -522,3 +522,41 @@ Linking CXX executable cmTC_a1fcf
     Feature record: CXX_FEATURE:0cxx_variable_templates
     Feature record: CXX_FEATURE:0cxx_variadic_macros
     Feature record: CXX_FEATURE:0cxx_variadic_templates
+Determining if the include file pthread.h exists passed with the following output:
+Change Dir: /Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_dba50/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_dba50.dir/build.make CMakeFiles/cmTC_dba50.dir/build
+Building C object CMakeFiles/cmTC_dba50.dir/CheckIncludeFile.c.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc    -o CMakeFiles/cmTC_dba50.dir/CheckIncludeFile.c.o   -c "/Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c"
+Linking C executable cmTC_dba50
+/Applications/CMake.app/Contents/bin/cmake -E cmake_link_script CMakeFiles/cmTC_dba50.dir/link.txt --verbose=1
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_dba50.dir/CheckIncludeFile.c.o  -o cmTC_dba50 
+
+
+Determining if the pthread_create exist passed with the following output:
+Change Dir: /Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_fb4d0/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_fb4d0.dir/build.make CMakeFiles/cmTC_fb4d0.dir/build
+Building C object CMakeFiles/cmTC_fb4d0.dir/CheckSymbolExists.c.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc    -o CMakeFiles/cmTC_fb4d0.dir/CheckSymbolExists.c.o   -c "/Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c"
+Linking C executable cmTC_fb4d0
+/Applications/CMake.app/Contents/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fb4d0.dir/link.txt --verbose=1
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_fb4d0.dir/CheckSymbolExists.c.o  -o cmTC_fb4d0 
+
+File /Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+

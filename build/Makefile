@@ -78,6 +78,17 @@ edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
 
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/Applications/CMake.app/Contents/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+
+.PHONY : test/fast
+
 # The main all target
 all: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/build/CMakeFiles" "/Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/build/CMakeFiles/progress.marks"
@@ -111,6 +122,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named unitest
+
+# Build rule for target.
+unitest: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 unitest
+.PHONY : unitest
+
+# fast build rule for target.
+unitest/fast:
+	$(MAKE) -f CMakeFiles/unitest.dir/build.make CMakeFiles/unitest.dir/build
+.PHONY : unitest/fast
+
+#=============================================================================
 # Target rules for targets named main
 
 # Build rule for target.
@@ -122,6 +146,32 @@ main: cmake_check_build_system
 main/fast:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
 .PHONY : main/fast
+
+#=============================================================================
+# Target rules for targets named gtest_main
+
+# Build rule for target.
+gtest_main: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 gtest_main
+.PHONY : gtest_main
+
+# fast build rule for target.
+gtest_main/fast:
+	$(MAKE) -f googletest/CMakeFiles/gtest_main.dir/build.make googletest/CMakeFiles/gtest_main.dir/build
+.PHONY : gtest_main/fast
+
+#=============================================================================
+# Target rules for targets named gtest
+
+# Build rule for target.
+gtest: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 gtest
+.PHONY : gtest
+
+# fast build rule for target.
+gtest/fast:
+	$(MAKE) -f googletest/CMakeFiles/gtest.dir/build.make googletest/CMakeFiles/gtest.dir/build
+.PHONY : gtest/fast
 
 main.o: main.cpp.o
 
@@ -156,6 +206,7 @@ neuron.o: neuron.cpp.o
 
 # target to build an object file
 neuron.cpp.o:
+	$(MAKE) -f CMakeFiles/unitest.dir/build.make CMakeFiles/unitest.dir/neuron.cpp.o
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/neuron.cpp.o
 .PHONY : neuron.cpp.o
 
@@ -165,6 +216,7 @@ neuron.i: neuron.cpp.i
 
 # target to preprocess a source file
 neuron.cpp.i:
+	$(MAKE) -f CMakeFiles/unitest.dir/build.make CMakeFiles/unitest.dir/neuron.cpp.i
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/neuron.cpp.i
 .PHONY : neuron.cpp.i
 
@@ -174,8 +226,36 @@ neuron.s: neuron.cpp.s
 
 # target to generate assembly for a file
 neuron.cpp.s:
+	$(MAKE) -f CMakeFiles/unitest.dir/build.make CMakeFiles/unitest.dir/neuron.cpp.s
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/neuron.cpp.s
 .PHONY : neuron.cpp.s
+
+unitest.o: unitest.cpp.o
+
+.PHONY : unitest.o
+
+# target to build an object file
+unitest.cpp.o:
+	$(MAKE) -f CMakeFiles/unitest.dir/build.make CMakeFiles/unitest.dir/unitest.cpp.o
+.PHONY : unitest.cpp.o
+
+unitest.i: unitest.cpp.i
+
+.PHONY : unitest.i
+
+# target to preprocess a source file
+unitest.cpp.i:
+	$(MAKE) -f CMakeFiles/unitest.dir/build.make CMakeFiles/unitest.dir/unitest.cpp.i
+.PHONY : unitest.cpp.i
+
+unitest.s: unitest.cpp.s
+
+.PHONY : unitest.s
+
+# target to generate assembly for a file
+unitest.cpp.s:
+	$(MAKE) -f CMakeFiles/unitest.dir/build.make CMakeFiles/unitest.dir/unitest.cpp.s
+.PHONY : unitest.cpp.s
 
 # Help Target
 help:
@@ -185,13 +265,20 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... test"
+	@echo "... unitest"
 	@echo "... main"
+	@echo "... gtest_main"
+	@echo "... gtest"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
 	@echo "... neuron.o"
 	@echo "... neuron.i"
 	@echo "... neuron.s"
+	@echo "... unitest.o"
+	@echo "... unitest.i"
+	@echo "... unitest.s"
 .PHONY : help
 
 

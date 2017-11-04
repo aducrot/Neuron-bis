@@ -35,9 +35,11 @@ class Neuron
 
 	//!< Getteurs et Setteurs
 	int getSpikecount() const;
+	double getPotential() const;
 	vector <double> getSpiketime() const;
 	bool getisSpiking() const;
 	vector<int> getConnection() const;
+	vector<int> getBuffer() const;
 	void setSpikecount ();
 	void setSpikeTime(double t);
 	void setConnexion (int const neuron_index);

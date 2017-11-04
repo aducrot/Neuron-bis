@@ -6,5 +6,5 @@ CXX_FLAGS = -O3 -W -Wall -pedantic -std=c++11
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/include 
+CXX_INCLUDES = -I/include -I"/Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/googletest/include" 
 

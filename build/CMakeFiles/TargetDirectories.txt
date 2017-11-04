@@ -1,3 +1,10 @@
 /Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/build/CMakeFiles/rebuild_cache.dir
 /Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/build/CMakeFiles/edit_cache.dir
+/Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/build/CMakeFiles/test.dir
+/Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/build/CMakeFiles/unitest.dir
 /Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/build/CMakeFiles/main.dir
+/Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/build/googletest/CMakeFiles/test.dir
+/Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/build/googletest/CMakeFiles/rebuild_cache.dir
+/Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/build/googletest/CMakeFiles/edit_cache.dir
+/Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/build/googletest/CMakeFiles/gtest_main.dir
+/Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/build/googletest/CMakeFiles/gtest.dir
