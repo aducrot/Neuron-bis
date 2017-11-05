@@ -19,7 +19,7 @@ class Neuron
 	int clock_; //!< neuron internal clock to keep track of time- number of h steps
 	bool isSpiking_; //!< boolean test to know if the neuron has spiked.
 	int Delay_; //!< Delay time initialised in contructor in number of time steps
-	vector <int> Buffer_; //!< keeps track of the number of spikes received at each time step
+	vector <double> Buffer_; //!< keeps track of the number of spikes received at each time step
 	double J_; //!< the potential increase of the mebran when it receives a spike
 						//!<(including from rest of the brain)
 	double threshold_;//!< membrane potential above which the neuron spikes
@@ -35,11 +35,14 @@ class Neuron
 
 	//!< Getteurs et Setteurs
 	int getSpikecount() const;
+	int getClock() const;
+	double getJ_() const;
+	int indices() const;
 	double getPotential() const;
 	vector <double> getSpiketime() const;
 	bool getisSpiking() const;
 	vector<int> getConnection() const;
-	vector<int> getBuffer() const;
+	vector<double> getBuffer() const;
 	void setSpikecount ();
 	void setSpikeTime(double t);
 	void setConnexion (int const neuron_index);

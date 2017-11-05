@@ -59,11 +59,15 @@ bool Neuron::getisSpiking() const
 	return isSpiking_;
 }
 
-vector<int> Neuron::getBuffer() const
+vector<double> Neuron::getBuffer() const
 {
 	return Buffer_;
 }
 
+double Neuron::getJ_() const
+{
+	return J_;
+}
 
 /**
 * @param int const neuron_index
@@ -76,7 +80,12 @@ void Neuron::setConnexion (int const neuron_index) //!< sets the connected_with_
 
 void Neuron::setBuffer() //!< sets the Buffer_ of the target neuron at the correct place
 {
-	Buffer_[(clock_+Delay_)%Buffer_.size()]+=J_;
+	Buffer_[(clock_+Delay_)%Buffer_.size()]=Buffer_[(clock_+Delay_)%Buffer_.size()]+J_;
+}
+
+int Neuron::indices() const
+{
+	return Buffer_[(clock_+Delay_)%Buffer_.size()]+J_;
 }
 
 void Neuron::setBool() //!< sets boolean isExcitory to true for Excitory neurons
@@ -84,6 +93,10 @@ void Neuron::setBool() //!< sets boolean isExcitory to true for Excitory neurons
 	isExcitory=true;
 }
 
+int Neuron::getClock() const
+{
+	return clock_;
+}
 /**
 * @return vector connected_with_
 */
@@ -119,6 +132,8 @@ void Neuron::give_spike(vector<Neuron>& neuron_sim)
 		neuron_sim[connected_with_[i]].setBuffer();
 	}
 }
+
+
 
 /**
 * update the potential of the neuron depending on if its in refractory time or not.
@@ -156,8 +171,8 @@ void Neuron::update(double& simtime, vector<Neuron>& neuron_sim)
 			setSpikecount();
 			setSpikeTime(simtime);
 			ref_time_= tauxRefractory_/h_;
-
 			assert (ref_time_>0);
+
 		} else {
 			isSpiking_=false;
 			potential_= (exp(-h_/taux_)*potential_)+Iext_*Res_*(1-exp(-h_/taux_))+

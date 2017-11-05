@@ -299,8 +299,6 @@ fstream
 /Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/unitest.cpp
 iostream
 -
-cmath
--
 neuron.hpp
 /Users/ducrotaurelie/Documents/EPFL/2e Annee/Programmation III/Projet/neuron.hpp
 gtest/gtest.h
