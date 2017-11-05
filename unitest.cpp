@@ -40,6 +40,7 @@ TEST (NeuronTest, Buffer)
 
   neurons[0].setBuffer();
   EXPECT_EQ(0.1, neurons[0].getBuffer()[15]); //there should be the value of J (0.1)
+                                              // when the clock is initialised at 0
 }
 
 TEST (NeuronTest, GiveSpike)
@@ -52,7 +53,8 @@ TEST (NeuronTest, GiveSpike)
     neurons.push_back(n);
   }
   neurons[0].setConnexion(1);
-  neurons[0].give_spike(neurons);
+  neurons[0].give_spike(neurons);//!<there should be the value of J (0.1)
+                                //!< when the clock is initialised at 0
   EXPECT_EQ(0.1,neurons[1].getBuffer()[15]);
 
 }

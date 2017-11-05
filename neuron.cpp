@@ -5,7 +5,6 @@
 #include <cassert>
 
 //!<Constructeur et destructeur
-
 Neuron::Neuron (): potential_(0.0), spikecount_(0),spikeTime_(0), taux_(20),tauxRefractory_(2), h_(0.1), Iext_(0),
 							ref_time_(tauxRefractory_/h_), conductivity_(1), Res_(taux_/conductivity_),
 							threshold_(20), isSpiking_(false),clock_(0),Delay_(15), Buffer_(Delay_+1,0.0), J_(0.1),
@@ -24,6 +23,9 @@ int Neuron::getSpikecount() const
 	return spikecount_;
 }
 
+/**
+* @return double potential
+*/
 double Neuron::getPotential() const
 {
 	return potential_;
@@ -59,14 +61,12 @@ bool Neuron::getisSpiking() const
 	return isSpiking_;
 }
 
+/**
+*@return vector<double> Buffer
+*/
 vector<double> Neuron::getBuffer() const
 {
 	return Buffer_;
-}
-
-double Neuron::getJ_() const
-{
-	return J_;
 }
 
 /**
@@ -83,20 +83,12 @@ void Neuron::setBuffer() //!< sets the Buffer_ of the target neuron at the corre
 	Buffer_[(clock_+Delay_)%Buffer_.size()]=Buffer_[(clock_+Delay_)%Buffer_.size()]+J_;
 }
 
-int Neuron::indices() const
-{
-	return Buffer_[(clock_+Delay_)%Buffer_.size()]+J_;
-}
 
 void Neuron::setBool() //!< sets boolean isExcitory to true for Excitory neurons
 {
 	isExcitory=true;
 }
 
-int Neuron::getClock() const
-{
-	return clock_;
-}
 /**
 * @return vector connected_with_
 */
@@ -133,8 +125,6 @@ void Neuron::give_spike(vector<Neuron>& neuron_sim)
 	}
 }
 
-
-
 /**
 * update the potential of the neuron depending on if its in refractory time or not.
 * It also sets the buffer of the target neurons if it has spiked
@@ -156,7 +146,6 @@ void Neuron::update(double& simtime, vector<Neuron>& neuron_sim)
 		potential_=0;
 		ref_time_-=1;
 		isSpiking_=false;
-
 
 	} else {
 

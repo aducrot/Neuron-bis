@@ -6,15 +6,15 @@
 using namespace std;
 
 void random_connection(vector <Neuron>& neuron_sim, int const CE, int const CI,
-												int const nb_exc, int const nb_inh);//!< method that will generate random connections.
-												//!<The values generated will correspond to the neurons index and will be stored in
-												//!< the neuron's attribut connected_with_.
+												int const nb_exc, int const nb_inh);//!< method that will generate random
+												//!<connections. The values generated will correspond to the neurons index
+												//!<and will be stored in the neuron's attribut connected_with_.
 
 int main()
 {
 	double g;
 	double eta;
-	double t_stop (100);//!< total simulation time
+	double t_stop (1000);//!< total simulation time
 	double h (0.1);//!< time step
 	double simtime (0);//!< Simulation time
 	int number_Neuron_sim;//!<numbers of neurons in the simulation
@@ -108,7 +108,6 @@ void random_connection(vector <Neuron>& neuron_sim, int const CE, int const CI,
 																					//!<the number of excitory neurons.
 																					//!<it corresponds to the indeces of excitory
 																					//!<neurons in the vector Neuron_sim
-
 	random_device rd2;
 	mt19937 eng2(rd2());
 	uniform_int_distribution<int> distr2(nb_exc+1,nb_exc+nb_inh-1);//!<the range is as large as

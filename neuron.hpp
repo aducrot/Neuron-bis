@@ -35,9 +35,6 @@ class Neuron
 
 	//!< Getteurs et Setteurs
 	int getSpikecount() const;
-	int getClock() const;
-	double getJ_() const;
-	int indices() const;
 	double getPotential() const;
 	vector <double> getSpiketime() const;
 	bool getisSpiking() const;
