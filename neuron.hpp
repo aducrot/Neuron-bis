@@ -1,8 +1,8 @@
 #ifndef NEURON_H
 #define NEURON_H
-using namespace std;
 #include <vector>
 #include <fstream>
+using namespace std;
 
 class Neuron
 {

@@ -14,7 +14,7 @@ int main()
 {
 	double g;
 	double eta;
-	double t_stop (1000);//!< total simulation time
+	double t_stop (100);//!< total simulation time
 	double h (0.1);//!< time step
 	double simtime (0);//!< Simulation time
 	int number_Neuron_sim;//!<numbers of neurons in the simulation
